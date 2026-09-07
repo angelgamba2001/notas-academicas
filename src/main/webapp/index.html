@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Notas Académicas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="encabezado">
+        <h1>Gestión de Notas Académicas</h1>
+        <p>Registra las cuatro notas de un estudiante y obtén su promedio y valoración de forma automática.</p>
+    </header>
+
+    <main class="contenedor">
+
+        <!-- ============ FORMULARIO DE REGISTRO ============ -->
+        <section class="tarjeta panel-formulario" aria-labelledby="tituloFormulario">
+            <h2 id="tituloFormulario">Registro de estudiante</h2>
+
+            <form id="formEstudiante" novalidate>
+                <input type="hidden" id="estudianteId" value="">
+
+                <div class="campo">
+                    <label for="nombre">Nombre del estudiante</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej. Camila Restrepo" autocomplete="off">
+                    <small class="error" id="errorNombre"></small>
+                </div>
+
+                <div class="grupo-notas">
+                    <div class="campo">
+                        <label for="nota1">Nota 1</label>
+                        <input type="number" id="nota1" name="nota1" min="0" max="5" step="0.1" placeholder="0.0 - 5.0">
+                        <small class="error" id="errorNota1"></small>
+                    </div>
+                    <div class="campo">
+                        <label for="nota2">Nota 2</label>
+                        <input type="number" id="nota2" name="nota2" min="0" max="5" step="0.1" placeholder="0.0 - 5.0">
+                        <small class="error" id="errorNota2"></small>
+                    </div>
+                    <div class="campo">
+                        <label for="nota3">Nota 3</label>
+                        <input type="number" id="nota3" name="nota3" min="0" max="5" step="0.1" placeholder="0.0 - 5.0">
+                        <small class="error" id="errorNota3"></small>
+                    </div>
+                    <div class="campo">
+                        <label for="nota4">Nota 4</label>
+                        <input type="number" id="nota4" name="nota4" min="0" max="5" step="0.1" placeholder="0.0 - 5.0">
+                        <small class="error" id="errorNota4"></small>
+                    </div>
+                </div>
+
+                <p class="ayuda">Cada nota debe estar entre 0.0 y 5.0. No se permiten valores negativos.</p>
+
+                <div class="acciones-formulario">
+                    <button type="button" id="btnCalcular" class="boton boton-secundario">Calcular</button>
+                    <button type="submit" id="btnGuardar" class="boton boton-primario">Guardar</button>
+                    <button type="button" id="btnCancelar" class="boton boton-texto oculto">Cancelar edición</button>
+                </div>
+
+                <div id="mensajeGlobal" class="mensaje oculto" role="alert"></div>
+            </form>
+
+            <!-- ============ ÁREA DE RESULTADOS ============ -->
+            <div id="areaResultado" class="tarjeta-resultado oculto" aria-live="polite">
+                <h3>Resultado</h3>
+                <div class="resultado-cuerpo">
+                    <div class="resultado-dato">
+                        <span class="etiqueta">Promedio</span>
+                        <span class="valor" id="valorPromedio">0.0</span>
+                    </div>
+                    <div class="resultado-dato">
+                        <span class="etiqueta">Estado</span>
+                        <span class="valor" id="valorEstado">-</span>
+                    </div>
+                </div>
+                <div class="insignia" id="insigniaRendimiento">Rendimiento</div>
+            </div>
+        </section>
+
+        <!-- ============ CONSULTA DE REGISTROS ============ -->
+        <section class="tarjeta panel-consulta" aria-labelledby="tituloConsulta">
+            <div class="encabezado-consulta">
+                <h2 id="tituloConsulta">Estudiantes registrados</h2>
+                <button type="button" id="btnRefrescar" class="boton boton-secundario">Actualizar lista</button>
+            </div>
+
+            <div class="tabla-envoltorio">
+                <table id="tablaEstudiantes">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>N1</th>
+                            <th>N2</th>
+                            <th>N3</th>
+                            <th>N4</th>
+                            <th>Promedio</th>
+                            <th>Resultado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTabla">
+                        <!-- Filas generadas dinámicamente por JavaScript -->
+                    </tbody>
+                </table>
+                <p id="tablaVacia" class="ayuda oculto">Aún no hay estudiantes registrados.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="pie">
+        <p>Proyecto integrador · Optativa II Desarrollo Móvil</p>
+    </footer>
+
+    <script src="js/estudiante.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
