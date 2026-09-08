@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Programación Académica</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab-btn { padding: 10px 15px; background: none; border: none; cursor: pointer; font-size: 15px; }
+        .tab-btn.activo { border-bottom: 3px solid #2c3e50; font-weight: bold; }
+        .tab-contenido { display: none; }
+        .tab-contenido.activo { display: block; }
+        .dashboard-cajas { display: flex; gap: 15px; flex-wrap: wrap; }
+        .caja { background: #f4f4f4; padding: 20px; border-radius: 8px; text-align: center; min-width: 150px; }
+        .caja h2 { margin: 0; font-size: 28px; color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 8px 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #f4f4f4; }
+    </style>
+</head>
+<body>
+
+    <h1>Programación Académica</h1>
+    <a href="index.html">&larr; Volver a Notas</a>
+
+    <div class="tabs">
+        <button class="tab-btn activo" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="cursos">Cursos</button>
+        <button class="tab-btn" data-tab="docentes">Docentes</button>
+        <button class="tab-btn" data-tab="asignaturas">Asignaturas</button>
+        <button class="tab-btn" data-tab="horarios">Horarios</button>
+        <button class="tab-btn" data-tab="horasextra">Horas Extra</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="tab-contenido activo">
+        <h2>Resumen General</h2>
+        <div class="dashboard-cajas">
+            <div class="caja"><h2 id="dashCursos">-</h2><p>Cursos</p></div>
+            <div class="caja"><h2 id="dashDocentes">-</h2><p>Docentes</p></div>
+            <div class="caja"><h2 id="dashAsignaturas">-</h2><p>Asignaturas</p></div>
+            <div class="caja"><h2 id="dashHorarios">-</h2><p>Horarios asignados</p></div>
+        </div>
+    </div>
+
+    <!-- Cursos -->
+    <div id="cursos" class="tab-contenido">
+        <h2>Cursos</h2>
+        <table id="tablaCursos">
+            <thead><tr><th>Grado</th><th>Curso</th><th>Jornada</th><th>Estudiantes</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Docentes -->
+    <div id="docentes" class="tab-contenido">
+        <h2>Docentes</h2>
+        <table id="tablaDocentes">
+            <thead><tr><th>Nombre</th><th>Disponibilidad</th><th>Horas máx. semanales</th><th>Carga actual</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Asignaturas -->
+    <div id="asignaturas" class="tab-contenido">
+        <h2>Asignaturas</h2>
+        <table id="tablaAsignaturas">
+            <thead><tr><th>Nombre</th><th>Intensidad horaria</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Horarios -->
+    <div id="horarios" class="tab-contenido">
+        <h2>Horarios</h2>
+        <table id="tablaHorarios">
+            <thead><tr><th>Día</th><th>Hora</th><th>Curso</th><th>Asignatura</th><th>Docente</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Horas Extra -->
+    <div id="horasextra" class="tab-contenido">
+        <h2>Horas Extra</h2>
+        <p>(Aquí irá el formulario y la tabla)</p>
+    </div>
+
+    <script src="js/programacion-academica.js"></script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 com\horarios\dao\HoraExtraDAO.class
 com\horarios\dao\DocenteDAO.class
 com\horarios\dao\PruebaHoraExtraDAO.class
+com\horarios\servlet\DocenteServlet$DocenteConCarga.class
 com\horarios\model\Docente.class
 com\horarios\servlet\AsignaturaServlet.class
 com\horarios\dao\CursoDAO.class

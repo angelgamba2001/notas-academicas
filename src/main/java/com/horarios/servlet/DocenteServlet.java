@@ -11,43 +11,70 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.horarios.dao.HorarioDAO; 
 
 @WebServlet("/api/docentes")
 public class DocenteServlet extends HttpServlet {
 
     private final DocenteDAO docenteDAO = new DocenteDAO();
+    private final HorarioDAO horarioDAO = new HorarioDAO(); // agrega esta línea junto a docenteDAO
     private final Gson gson = GsonUtil.crearGson();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
 
-        PrintWriter out = response.getWriter();
+    PrintWriter out = response.getWriter();
 
-        try {
-            String idParam = request.getParameter("id");
+    try {
+        String idParam = request.getParameter("id");
 
-            if (idParam != null) {
-                Docente docente = docenteDAO.buscarPorId(Integer.parseInt(idParam));
-                out.print(gson.toJson(docente));
-            } else {
-                List<Docente> docentes = docenteDAO.listarTodos();
-                out.print(gson.toJson(docentes));
+        if (idParam != null) {
+            Docente docente = docenteDAO.buscarPorId(Integer.parseInt(idParam));
+            out.print(gson.toJson(docente));
+        } else {
+            List<Docente> docentes = docenteDAO.listarTodos();
+            List<DocenteConCarga> resultado = new java.util.ArrayList<>();
+
+            for (Docente d : docentes) {
+                DocenteConCarga dc = new DocenteConCarga();
+                dc.idDocente = d.getIdDocente();
+                dc.nombre = d.getNombre();
+                dc.apellido = d.getApellido();
+                dc.disponibilidad = d.getDisponibilidad();
+                dc.horasMaximasSemanales = d.getHorasMaximasSemanales();
+                dc.cargaActual = horarioDAO.calcularCargaSemanal(d.getIdDocente());
+                resultado.add(dc);
             }
 
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));
-        } finally {
-            out.close();
+            out.print(gson.toJson(resultado));
         }
+
+    } catch (Exception e) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));
+    } finally {
+        out.close();
     }
+}
+
+// Clase auxiliar: un Docente pero con su carga actual incluida
+private static class DocenteConCarga {
+    int idDocente;
+    String nombre;
+    String apellido;
+    String disponibilidad;
+    int horasMaximasSemanales;
+    double cargaActual;
+}
 
     private static class ErrorRespuesta {
         String error;
         ErrorRespuesta(String error) { this.error = error; }
     }
 }
+
+ 
