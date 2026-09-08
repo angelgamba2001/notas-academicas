@@ -3,6 +3,7 @@ com\horarios\dao\DocenteDAO.class
 com\horarios\dao\PruebaHoraExtraDAO.class
 com\horarios\servlet\DocenteServlet$DocenteConCarga.class
 com\horarios\model\Docente.class
+com\horarios\servlet\AsignaturaServlet$MensajeRespuesta.class
 com\horarios\servlet\AsignaturaServlet.class
 com\horarios\dao\CursoDAO.class
 com\horarios\servlet\CursoServlet.class
@@ -29,9 +30,11 @@ com\horarios\servlet\HorarioServlet$ErrorRespuesta.class
 com\horarios\servlet\GsonUtil$1.class
 com\horarios\dao\AsignaturaDAO.class
 com\horarios\servlet\GsonUtil.class
+com\horarios\servlet\CursoServlet$MensajeRespuesta.class
 com\horarios\servlet\DashboardServlet$ResumenDashboard.class
 com\notas\dao\EstudianteDAO.class
 com\horarios\servlet\AsignaturaServlet$ErrorRespuesta.class
+com\horarios\servlet\DocenteServlet$MensajeRespuesta.class
 com\horarios\servlet\GsonUtil$3.class
 com\horarios\servlet\HoraExtraServlet$RespuestaHorasExtra.class
 com\horarios\servlet\DashboardServlet.class

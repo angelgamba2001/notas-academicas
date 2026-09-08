@@ -45,45 +45,104 @@
 
     <!-- Cursos -->
     <div id="cursos" class="tab-contenido">
-        <h2>Cursos</h2>
-        <table id="tablaCursos">
-            <thead><tr><th>Grado</th><th>Curso</th><th>Jornada</th><th>Estudiantes</th></tr></thead>
-            <tbody></tbody>
-        </table>
-    </div>
+    <h2>Cursos</h2>
+
+    <form id="formCurso">
+        <input type="text" id="cGrado" placeholder="Grado (ej: Décimo)" required>
+        <input type="text" id="cNombreCurso" placeholder="Curso (ej: 10-A)" required>
+        <input type="text" id="cJornada" placeholder="Jornada" required>
+        <input type="number" id="cNumEstudiantes" placeholder="N° estudiantes" required>
+        <button type="submit">Agregar Curso</button>
+    </form>
+
+    <table id="tablaCursos">
+        <thead><tr><th>Grado</th><th>Curso</th><th>Jornada</th><th>Estudiantes</th><th>Acción</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
     <!-- Docentes -->
     <div id="docentes" class="tab-contenido">
-        <h2>Docentes</h2>
-        <table id="tablaDocentes">
-            <thead><tr><th>Nombre</th><th>Disponibilidad</th><th>Horas máx. semanales</th><th>Carga actual</th></tr></thead>
-            <tbody></tbody>
-        </table>
-    </div>
+    <h2>Docentes</h2>
+
+    <form id="formDocente">
+        <input type="text" id="dNombre" placeholder="Nombre" required>
+        <input type="text" id="dApellido" placeholder="Apellido" required>
+        <input type="text" id="dDisponibilidad" placeholder="Disponibilidad (ej: Lunes a Viernes)">
+        <input type="number" id="dHorasMax" placeholder="Horas máx. semanales" value="20" required>
+        <button type="submit">Agregar Docente</button>
+    </form>
+
+    <table id="tablaDocentes">
+        <thead><tr><th>Nombre</th><th>Disponibilidad</th><th>Horas máx. semanales</th><th>Carga actual</th><th>Acción</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
     <!-- Asignaturas -->
     <div id="asignaturas" class="tab-contenido">
-        <h2>Asignaturas</h2>
-        <table id="tablaAsignaturas">
-            <thead><tr><th>Nombre</th><th>Intensidad horaria</th></tr></thead>
-            <tbody></tbody>
-        </table>
-    </div>
+    <h2>Asignaturas</h2>
+
+    <form id="formAsignatura">
+        <input type="text" id="aNombre" placeholder="Nombre (ej: Matemáticas)" required>
+        <input type="number" id="aIntensidad" placeholder="Intensidad horaria" required>
+        <button type="submit">Agregar Asignatura</button>
+    </form>
+
+    <table id="tablaAsignaturas">
+        <thead><tr><th>Nombre</th><th>Intensidad horaria</th><th>Acción</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
     <!-- Horarios -->
     <div id="horarios" class="tab-contenido">
-        <h2>Horarios</h2>
-        <table id="tablaHorarios">
-            <thead><tr><th>Día</th><th>Hora</th><th>Curso</th><th>Asignatura</th><th>Docente</th></tr></thead>
-            <tbody></tbody>
-        </table>
-    </div>
+    <h2>Horarios</h2>
+
+    <form id="formHorarioReal">
+        <select id="hIdCurso"></select>
+        <select id="hIdAsignatura"></select>
+        <select id="hIdDocente"></select>
+        <select id="hDia">
+            <option>Lunes</option>
+            <option>Martes</option>
+            <option>Miercoles</option>
+            <option>Jueves</option>
+            <option>Viernes</option>
+        </select>
+        <input type="time" id="hHoraInicio" required>
+        <input type="time" id="hHoraFin" required>
+        <button type="submit">Asignar Horario</button>
+    </form>
+
+    <p id="mensajeHorario" style="font-weight: bold;"></p>
+
+    <table id="tablaHorarios">
+        <thead><tr><th>Día</th><th>Hora</th><th>Curso</th><th>Asignatura</th><th>Docente</th><th>Acción</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
     <!-- Horas Extra -->
     <div id="horasextra" class="tab-contenido">
-        <h2>Horas Extra</h2>
-        <p>(Aquí irá el formulario y la tabla)</p>
-    </div>
+    <h2>Horas Extra</h2>
+
+    <form id="formHoraExtra">
+        <select id="heIdDocente"></select>
+        <input type="date" id="heFecha" required>
+        <input type="number" id="heHoras" step="0.5" placeholder="Horas" required>
+        <button type="submit">Registrar</button>
+    </form>
+
+    <p id="mensajeHoraExtra" style="font-weight: bold;"></p>
+
+    <div id="totalesHoraExtra"></div>
+
+    <table id="tablaHorasExtra">
+        <thead><tr><th>Fecha</th><th>Horas</th></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
     <script src="js/programacion-academica.js"></script>
 </body>

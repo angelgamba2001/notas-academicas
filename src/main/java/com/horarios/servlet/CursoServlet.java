@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+
 
 @WebServlet("/api/cursos")
 public class CursoServlet extends HttpServlet {
@@ -36,7 +38,59 @@ public class CursoServlet extends HttpServlet {
             out_error(response, "Error al consultar cursos: " + e.getMessage());
         }
     }
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    PrintWriter out = response.getWriter();
+
+    try {
+        BufferedReader reader = request.getReader();
+        StringBuilder sb = new StringBuilder();
+        String linea;
+        while ((linea = reader.readLine()) != null) sb.append(linea);
+
+        Curso nuevo = gson.fromJson(sb.toString(), Curso.class);
+        cursoDAO.insertar(nuevo);
+
+        response.setStatus(HttpServletResponse.SC_CREATED);
+        out.print(gson.toJson(new MensajeRespuesta("Curso creado correctamente.")));
+
+    } catch (Exception e) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));
+    } finally {
+        out.close();
+    }
+}
+
+@Override
+protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    PrintWriter out = response.getWriter();
+
+    try {
+        int id = Integer.parseInt(request.getParameter("id"));
+        cursoDAO.eliminar(id);
+        out.print(gson.toJson(new MensajeRespuesta("Curso eliminado correctamente.")));
+
+    } catch (Exception e) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));
+    } finally {
+        out.close();
+    }
+}
+
+private static class MensajeRespuesta {
+    String mensaje;
+    MensajeRespuesta(String mensaje) { this.mensaje = mensaje; }
+}
     private void out_error(HttpServletResponse response, String mensaje) throws IOException {
         try (PrintWriter out = response.getWriter()) {
             out.print(gson.toJson(new ErrorRespuesta(mensaje)));
