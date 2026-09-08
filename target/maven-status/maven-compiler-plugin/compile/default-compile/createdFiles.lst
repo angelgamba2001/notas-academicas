@@ -28,3 +28,4 @@ com\notas\dao\EstudianteDAO.class
 com\horarios\servlet\AsignaturaServlet$ErrorRespuesta.class
 com\horarios\servlet\GsonUtil$3.class
 com\horarios\model\Asignatura.class
+com\horarios\servlet\HorarioServlet$MensajeRespuesta.class

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba - Crear Horario</title>
+</head>
+<body>
+    <h2>Prueba: Crear Horario (POST)</h2>
+
+    <form id="formHorario">
+        <label>ID Curso: <input type="number" id="idCurso" value="1"></label><br><br>
+        <label>ID Asignatura: <input type="number" id="idAsignatura" value="1"></label><br><br>
+        <label>ID Docente: <input type="number" id="idDocente" value="2"></label><br><br>
+        <label>Día:
+            <select id="dia">
+                <option>Lunes</option>
+                <option>Martes</option>
+                <option>Miercoles</option>
+                <option>Jueves</option>
+                <option>Viernes</option>
+            </select>
+        </label><br><br>
+        <label>Hora inicio: <input type="time" id="horaInicio" value="10:00"></label><br><br>
+        <label>Hora fin: <input type="time" id="horaFin" value="11:00"></label><br><br>
+
+        <button type="submit">Crear Horario</button>
+    </form>
+
+    <h3>Resultado:</h3>
+    <pre id="resultado"></pre>
+
+    <script>
+        document.getElementById('formHorario').addEventListener('submit', function(e) {
+            e.preventDefault(); // evita que la página se recargue
+
+            const datos = {
+                idCurso: parseInt(document.getElementById('idCurso').value),
+                idAsignatura: parseInt(document.getElementById('idAsignatura').value),
+                idDocente: parseInt(document.getElementById('idDocente').value),
+                dia: document.getElementById('dia').value,
+                horaInicio: document.getElementById('horaInicio').value,
+                horaFin: document.getElementById('horaFin').value
+            };
+
+            fetch('api/horarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            })
+            .then(response => {
+                document.getElementById('resultado').textContent = 'Código de estado: ' + response.status;
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('resultado').textContent += '\n' + JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('resultado').textContent = 'Error: ' + error;
+            });
+        });
+    </script>
+</body>
+</html>
