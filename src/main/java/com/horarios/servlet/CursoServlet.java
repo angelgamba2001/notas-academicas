@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CursoServlet extends HttpServlet {
 
     private final CursoDAO cursoDAO = new CursoDAO();
-    private final Gson gson = new Gson();
+    private final Gson gson = GsonUtil.crearGson();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
