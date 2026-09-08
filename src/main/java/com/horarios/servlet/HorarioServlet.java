@@ -99,6 +99,35 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     }
 }
 
+@Override
+protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+
+    PrintWriter out = response.getWriter();
+
+    try {
+        String idParam = request.getParameter("id");
+
+        if (idParam == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print(gson.toJson(new ErrorRespuesta("Debes indicar el parámetro 'id'.")));
+            return;
+        }
+
+        horarioDAO.eliminar(Integer.parseInt(idParam));
+        out.print(gson.toJson(new MensajeRespuesta("Horario eliminado correctamente.")));
+
+    } catch (Exception e) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));
+    } finally {
+        out.close();
+    }
+}
+
 // Clase auxiliar para dar forma a mensajes de éxito
 private static class MensajeRespuesta {
     String mensaje;
