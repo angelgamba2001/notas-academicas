@@ -585,3 +585,15 @@ tbody tr:hover {
     font-family: var(--fuente-datos);
     letter-spacing: 0.02em;
 }
+
+a.boton {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* agrega esto a tu style.css */
+.tab-btn.activo {
+    background: var(--naranja);
+    color: #fff;
+}

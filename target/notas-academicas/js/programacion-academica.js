@@ -11,6 +11,9 @@ document.querySelectorAll('.tab-btn').forEach(boton => {
     });
 });
 
+// Marca la pestaña de Dashboard como activa desde el inicio
+document.querySelector('[data-tab="dashboard"]').classList.add('activo');
+
 // Decide qué datos cargar según la pestaña que se abrió
 function cargarDatosDeTab(tab) {
     if (tab === 'dashboard') cargarDashboard();
@@ -39,7 +42,7 @@ function cargarHorasExtra() {
         .then(res => res.json())
         .then(data => {
             document.getElementById('totalesHoraExtra').innerHTML =
-                `<p>Total esta semana: <b>${data.totalSemana} / 1 hora</b> &nbsp;|&nbsp; Total este mes: <b>${data.totalMes} / 4 horas</b></p>`;
+                `Total esta semana: <b>${data.totalSemana} / 1 hora</b> &nbsp;|&nbsp; Total este mes: <b>${data.totalMes} / 4 horas</b>`;
 
             const tbody = document.querySelector('#tablaHorasExtra tbody');
             tbody.innerHTML = '';
@@ -71,20 +74,21 @@ document.getElementById('formHoraExtra').addEventListener('submit', function(e) 
     .then(res => res.json().then(body => ({ status: res.status, body })))
     .then(({ status, body }) => {
         if (status === 201) {
-            mensajeEl.style.color = 'green';
+            mensajeEl.className = 'mensaje exito';
             mensajeEl.textContent = body.mensaje;
             document.getElementById('formHoraExtra').reset();
             cargarHorasExtra();
         } else {
-            mensajeEl.style.color = 'red';
+            mensajeEl.className = 'mensaje error';
             mensajeEl.textContent = body.error;
         }
     })
     .catch(err => {
-        mensajeEl.style.color = 'red';
+        mensajeEl.className = 'mensaje error';
         mensajeEl.textContent = 'Error inesperado: ' + err;
     });
 });
+
 // --- DASHBOARD ---
 function cargarDashboard() {
     fetch('api/dashboard')
@@ -111,7 +115,7 @@ function cargarCursos() {
                     <td>${c.nombreCurso}</td>
                     <td>${c.jornada}</td>
                     <td>${c.numEstudiantes}</td>
-                    <td><button onclick="eliminarCurso(${c.idCurso})">Eliminar</button></td>
+                    <td class="acciones-fila"><button class="boton boton-peligro" onclick="eliminarCurso(${c.idCurso})">Eliminar</button></td>
                 </tr>`;
             });
         })
@@ -131,8 +135,8 @@ function cargarDocentes() {
                     <td>${d.nombre} ${d.apellido}</td>
                     <td>${d.disponibilidad ?? '-'}</td>
                     <td>${d.horasMaximasSemanales}</td>
-                    <td style="color: ${excedido ? 'red' : 'inherit'}">${d.cargaActual} hrs</td>
-                    <td><button onclick="eliminarDocente(${d.idDocente})">Eliminar</button></td>
+                    <td style="color: ${excedido ? 'var(--lapiz-rojo)' : 'inherit'}; font-weight: ${excedido ? '700' : 'inherit'}">${d.cargaActual} hrs</td>
+                    <td class="acciones-fila"><button class="boton boton-peligro" onclick="eliminarDocente(${d.idDocente})">Eliminar</button></td>
                 </tr>`;
             });
         })
@@ -150,7 +154,7 @@ function cargarAsignaturas() {
                 tbody.innerHTML += `<tr>
                     <td>${a.nombre}</td>
                     <td>${a.intensidadHoraria} hrs</td>
-                    <td><button onclick="eliminarAsignatura(${a.idAsignatura})">Eliminar</button></td>
+                    <td class="acciones-fila"><button class="boton boton-peligro" onclick="eliminarAsignatura(${a.idAsignatura})">Eliminar</button></td>
                 </tr>`;
             });
         })
@@ -171,13 +175,12 @@ function cargarHorarios() {
                     <td>${h.nombreCurso}</td>
                     <td>${h.nombreAsignatura}</td>
                     <td>${h.nombreDocente}</td>
-                    <td><button onclick="eliminarHorario(${h.idHorario})">Eliminar</button></td>
+                    <td class="acciones-fila"><button class="boton boton-peligro" onclick="eliminarHorario(${h.idHorario})">Eliminar</button></td>
                 </tr>`;
             });
         })
         .catch(err => console.error('Error cargando horarios:', err));
 }
-
 
 // --- Crear curso ---
 document.getElementById('formCurso').addEventListener('submit', function(e) {
@@ -198,7 +201,7 @@ document.getElementById('formCurso').addEventListener('submit', function(e) {
     .then(res => res.json())
     .then(() => {
         document.getElementById('formCurso').reset();
-        cargarCursos(); // recarga la tabla con el nuevo curso incluido
+        cargarCursos();
     })
     .catch(err => alert('Error al crear curso: ' + err));
 });
@@ -278,6 +281,7 @@ function eliminarAsignatura(id) {
         .then(() => cargarAsignaturas())
         .catch(err => alert('Error al eliminar: ' + err));
 }
+
 // Llena los <select> del formulario de horarios con datos reales
 function cargarSelectsHorario() {
     fetch('api/cursos')
@@ -325,18 +329,18 @@ document.getElementById('formHorarioReal').addEventListener('submit', function(e
     .then(res => res.json().then(body => ({ status: res.status, body })))
     .then(({ status, body }) => {
         if (status === 201) {
-            mensajeEl.style.color = 'green';
+            mensajeEl.className = 'mensaje exito';
             mensajeEl.textContent = body.mensaje;
             document.getElementById('formHorarioReal').reset();
             cargarHorarios();
             cargarDocentes(); // para refrescar la carga actual del docente
         } else {
-            mensajeEl.style.color = 'red';
+            mensajeEl.className = 'mensaje error';
             mensajeEl.textContent = body.error; // aquí sale el mensaje de conflicto o exceso de horas
         }
     })
     .catch(err => {
-        mensajeEl.style.color = 'red';
+        mensajeEl.className = 'mensaje error';
         mensajeEl.textContent = 'Error inesperado: ' + err;
     });
 });
@@ -353,7 +357,6 @@ function eliminarHorario(id) {
         })
         .catch(err => alert('Error al eliminar: ' + err));
 }
-
 
 // Cargar el dashboard automáticamente al abrir la página (es la pestaña inicial)
 document.addEventListener('DOMContentLoaded', cargarDashboard);

@@ -5,144 +5,209 @@
     <title>Programación Académica</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab-btn { padding: 10px 15px; background: none; border: none; cursor: pointer; font-size: 15px; }
-        .tab-btn.activo { border-bottom: 3px solid #2c3e50; font-weight: bold; }
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
+        .tab-btn { padding: 0.5rem 1rem; font-size: 0.82rem; }
+        .tab-btn.activo { background: var(--naranja); color: #fff; }
+        .tab-btn.activo::before { display: none; }
+
         .tab-contenido { display: none; }
         .tab-contenido.activo { display: block; }
-        .dashboard-cajas { display: flex; gap: 15px; flex-wrap: wrap; }
-        .caja { background: #f4f4f4; padding: 20px; border-radius: 8px; text-align: center; min-width: 150px; }
-        .caja h2 { margin: 0; font-size: 28px; color: #2c3e50; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 8px 10px; border: 1px solid #ddd; text-align: left; }
-        th { background: #f4f4f4; }
+
+        .dashboard-cajas { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .dashboard-cajas .caja {
+            flex: 1; min-width: 160px; text-align: center;
+            background: #F7F9FC; border: 1px solid var(--borde);
+            border-radius: var(--radio-tarjeta); padding: 1.2rem 1rem;
+        }
+        .dashboard-cajas .valor {
+            font-family: var(--fuente-datos); font-size: 2rem;
+            font-weight: 700; color: var(--naranja-oscuro);
+        }
+        .dashboard-cajas .etiqueta {
+            font-size: 0.78rem; text-transform: uppercase;
+            letter-spacing: 0.05em; color: var(--tinta-suave);
+        }
+
+        .fila-form {
+            display: flex; gap: 0.6rem; flex-wrap: wrap;
+            margin-bottom: 1.2rem; align-items: center;
+        }
+        .fila-form input, .fila-form select {
+            padding: 0.6rem 0.8rem; border: 1.5px solid var(--borde);
+            border-radius: var(--radio); font-family: var(--fuente-cuerpo);
+            font-size: 0.92rem; background: #FAFBFD;
+        }
+        .fila-form input:focus-visible, .fila-form select:focus-visible {
+            outline: none; border-color: var(--naranja); background: #fff;
+            box-shadow: 0 0 0 3px rgba(240, 134, 46, 0.18);
+        }
     </style>
 </head>
 <body>
 
-    <h1>Programación Académica</h1>
-    <a href="index.html">&larr; Volver a Notas</a>
+    <header class="encabezado">
+        <h1>Programación Académica</h1>
+        <p>Gestiona cursos, docentes, asignaturas, horarios y horas extra desde un solo lugar.</p>
+        <a href="index.html" class="boton boton-secundario">&larr; Volver a Notas</a>
+    </header>
 
-    <div class="tabs">
-        <button class="tab-btn activo" data-tab="dashboard">Dashboard</button>
-        <button class="tab-btn" data-tab="cursos">Cursos</button>
-        <button class="tab-btn" data-tab="docentes">Docentes</button>
-        <button class="tab-btn" data-tab="asignaturas">Asignaturas</button>
-        <button class="tab-btn" data-tab="horarios">Horarios</button>
-        <button class="tab-btn" data-tab="horasextra">Horas Extra</button>
-    </div>
+    <div class="tarjeta" style="max-width: 1360px; margin: 0 auto 2rem; padding: 1.6rem;">
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="tab-contenido activo">
-        <h2>Resumen General</h2>
-        <div class="dashboard-cajas">
-            <div class="caja"><h2 id="dashCursos">-</h2><p>Cursos</p></div>
-            <div class="caja"><h2 id="dashDocentes">-</h2><p>Docentes</p></div>
-            <div class="caja"><h2 id="dashAsignaturas">-</h2><p>Asignaturas</p></div>
-            <div class="caja"><h2 id="dashHorarios">-</h2><p>Horarios asignados</p></div>
+        <div class="tabs">
+            <button class="boton boton-secundario tab-btn activo" data-tab="dashboard">Dashboard</button>
+            <button class="boton boton-secundario tab-btn" data-tab="cursos">Cursos</button>
+            <button class="boton boton-secundario tab-btn" data-tab="docentes">Docentes</button>
+            <button class="boton boton-secundario tab-btn" data-tab="asignaturas">Asignaturas</button>
+            <button class="boton boton-secundario tab-btn" data-tab="horarios">Horarios</button>
+            <button class="boton boton-secundario tab-btn" data-tab="horasextra">Horas Extra</button>
         </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="tab-contenido activo">
+            <h2>Resumen General</h2>
+            <div class="dashboard-cajas">
+                <div class="caja"><div class="valor" id="dashCursos">-</div><div class="etiqueta">Cursos</div></div>
+                <div class="caja"><div class="valor" id="dashDocentes">-</div><div class="etiqueta">Docentes</div></div>
+                <div class="caja"><div class="valor" id="dashAsignaturas">-</div><div class="etiqueta">Asignaturas</div></div>
+                <div class="caja"><div class="valor" id="dashHorarios">-</div><div class="etiqueta">Horarios asignados</div></div>
+            </div>
+        </div>
+
+        <!-- Cursos -->
+        <div id="cursos" class="tab-contenido">
+            <div class="encabezado-consulta">
+                <h2>Cursos</h2>
+            </div>
+            <form id="formCurso" class="fila-form">
+    <select id="cGrado" required>
+        <option value="">Grado...</option>
+        <option value="1">1°</option>
+        <option value="2">2°</option>
+        <option value="3">3°</option>
+        <option value="4">4°</option>
+        <option value="5">5°</option>
+        <option value="6">6°</option>
+        <option value="7">7°</option>
+        <option value="8">8°</option>
+        <option value="9">9°</option>
+        <option value="10">10°</option>
+        <option value="11">11°</option>
+    </select>
+
+    <select id="cSeccion" required>
+        <option value="">Sección...</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+    </select>
+
+    <select id="cJornada" required>
+        <option value="">Jornada...</option>
+        <option value="Mañana">Mañana</option>
+        <option value="Tarde">Tarde</option>
+    </select>
+
+    <input type="number" id="cNumEstudiantes" placeholder="N° estudiantes" min="1" step="1" required>
+
+    <button type="submit" class="boton boton-primario">Agregar Curso</button>
+</form>
+            <div class="tabla-envoltorio">
+                <table id="tablaCursos">
+                    <thead><tr><th>Grado</th><th>Curso</th><th>Jornada</th><th>Estudiantes</th><th>Acción</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Docentes -->
+        <div id="docentes" class="tab-contenido">
+            <div class="encabezado-consulta">
+                <h2>Docentes</h2>
+            </div>
+            <form id="formDocente" class="fila-form">
+                <input type="text" id="dNombre" placeholder="Nombre" required>
+                <input type="text" id="dApellido" placeholder="Apellido" required>
+                <input type="text" id="dDisponibilidad" placeholder="Disponibilidad">
+                <input type="number" id="dHorasMax" placeholder="Horas máx." value="20" required>
+                <button type="submit" class="boton boton-primario">Agregar Docente</button>
+            </form>
+            <div class="tabla-envoltorio">
+                <table id="tablaDocentes">
+                    <thead><tr><th>Nombre</th><th>Disponibilidad</th><th>Horas máx.</th><th>Carga actual</th><th>Acción</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Asignaturas -->
+        <div id="asignaturas" class="tab-contenido">
+            <div class="encabezado-consulta">
+                <h2>Asignaturas</h2>
+            </div>
+            <form id="formAsignatura" class="fila-form">
+                <input type="text" id="aNombre" placeholder="Nombre" required>
+                <input type="number" id="aIntensidad" placeholder="Intensidad horaria" required>
+                <button type="submit" class="boton boton-primario">Agregar Asignatura</button>
+            </form>
+            <div class="tabla-envoltorio">
+                <table id="tablaAsignaturas">
+                    <thead><tr><th>Nombre</th><th>Intensidad horaria</th><th>Acción</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Horarios -->
+        <div id="horarios" class="tab-contenido">
+            <div class="encabezado-consulta">
+                <h2>Horarios</h2>
+            </div>
+            <form id="formHorarioReal" class="fila-form">
+                <select id="hIdCurso"></select>
+                <select id="hIdAsignatura"></select>
+                <select id="hIdDocente"></select>
+                <select id="hDia">
+                    <option>Lunes</option><option>Martes</option><option>Miercoles</option>
+                    <option>Jueves</option><option>Viernes</option>
+                </select>
+                <input type="time" id="hHoraInicio" required>
+                <input type="time" id="hHoraFin" required>
+                <button type="submit" class="boton boton-primario">Asignar Horario</button>
+            </form>
+            <p id="mensajeHorario" class="mensaje oculto"></p>
+            <div class="tabla-envoltorio">
+                <table id="tablaHorarios">
+                    <thead><tr><th>Día</th><th>Hora</th><th>Curso</th><th>Asignatura</th><th>Docente</th><th>Acción</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Horas Extra -->
+        <div id="horasextra" class="tab-contenido">
+            <div class="encabezado-consulta">
+                <h2>Horas Extra</h2>
+            </div>
+            <form id="formHoraExtra" class="fila-form">
+                <select id="heIdDocente"></select>
+                <input type="date" id="heFecha" required>
+                <input type="number" id="heHoras" step="0.5" placeholder="Horas" required>
+                <button type="submit" class="boton boton-primario">Registrar</button>
+            </form>
+            <p id="mensajeHoraExtra" class="mensaje oculto"></p>
+            <p class="ayuda" id="totalesHoraExtra"></p>
+            <div class="tabla-envoltorio">
+                <table id="tablaHorasExtra">
+                    <thead><tr><th>Fecha</th><th>Horas</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Cursos -->
-    <div id="cursos" class="tab-contenido">
-    <h2>Cursos</h2>
-
-    <form id="formCurso">
-        <input type="text" id="cGrado" placeholder="Grado (ej: Décimo)" required>
-        <input type="text" id="cNombreCurso" placeholder="Curso (ej: 10-A)" required>
-        <input type="text" id="cJornada" placeholder="Jornada" required>
-        <input type="number" id="cNumEstudiantes" placeholder="N° estudiantes" required>
-        <button type="submit">Agregar Curso</button>
-    </form>
-
-    <table id="tablaCursos">
-        <thead><tr><th>Grado</th><th>Curso</th><th>Jornada</th><th>Estudiantes</th><th>Acción</th></tr></thead>
-        <tbody></tbody>
-    </table>
-</div>
-
-    <!-- Docentes -->
-    <div id="docentes" class="tab-contenido">
-    <h2>Docentes</h2>
-
-    <form id="formDocente">
-        <input type="text" id="dNombre" placeholder="Nombre" required>
-        <input type="text" id="dApellido" placeholder="Apellido" required>
-        <input type="text" id="dDisponibilidad" placeholder="Disponibilidad (ej: Lunes a Viernes)">
-        <input type="number" id="dHorasMax" placeholder="Horas máx. semanales" value="20" required>
-        <button type="submit">Agregar Docente</button>
-    </form>
-
-    <table id="tablaDocentes">
-        <thead><tr><th>Nombre</th><th>Disponibilidad</th><th>Horas máx. semanales</th><th>Carga actual</th><th>Acción</th></tr></thead>
-        <tbody></tbody>
-    </table>
-</div>
-
-    <!-- Asignaturas -->
-    <div id="asignaturas" class="tab-contenido">
-    <h2>Asignaturas</h2>
-
-    <form id="formAsignatura">
-        <input type="text" id="aNombre" placeholder="Nombre (ej: Matemáticas)" required>
-        <input type="number" id="aIntensidad" placeholder="Intensidad horaria" required>
-        <button type="submit">Agregar Asignatura</button>
-    </form>
-
-    <table id="tablaAsignaturas">
-        <thead><tr><th>Nombre</th><th>Intensidad horaria</th><th>Acción</th></tr></thead>
-        <tbody></tbody>
-    </table>
-</div>
-
-    <!-- Horarios -->
-    <div id="horarios" class="tab-contenido">
-    <h2>Horarios</h2>
-
-    <form id="formHorarioReal">
-        <select id="hIdCurso"></select>
-        <select id="hIdAsignatura"></select>
-        <select id="hIdDocente"></select>
-        <select id="hDia">
-            <option>Lunes</option>
-            <option>Martes</option>
-            <option>Miercoles</option>
-            <option>Jueves</option>
-            <option>Viernes</option>
-        </select>
-        <input type="time" id="hHoraInicio" required>
-        <input type="time" id="hHoraFin" required>
-        <button type="submit">Asignar Horario</button>
-    </form>
-
-    <p id="mensajeHorario" style="font-weight: bold;"></p>
-
-    <table id="tablaHorarios">
-        <thead><tr><th>Día</th><th>Hora</th><th>Curso</th><th>Asignatura</th><th>Docente</th><th>Acción</th></tr></thead>
-        <tbody></tbody>
-    </table>
-</div>
-
-    <!-- Horas Extra -->
-    <div id="horasextra" class="tab-contenido">
-    <h2>Horas Extra</h2>
-
-    <form id="formHoraExtra">
-        <select id="heIdDocente"></select>
-        <input type="date" id="heFecha" required>
-        <input type="number" id="heHoras" step="0.5" placeholder="Horas" required>
-        <button type="submit">Registrar</button>
-    </form>
-
-    <p id="mensajeHoraExtra" style="font-weight: bold;"></p>
-
-    <div id="totalesHoraExtra"></div>
-
-    <table id="tablaHorasExtra">
-        <thead><tr><th>Fecha</th><th>Horas</th></tr></thead>
-        <tbody></tbody>
-    </table>
-</div>
+    <p class="pie">Proyecto integrador · Programación Académica</p>
 
     <script src="js/programacion-academica.js"></script>
 </body>
