@@ -2,9 +2,12 @@ com\horarios\dao\HoraExtraDAO.class
 com\horarios\dao\DocenteDAO.class
 com\horarios\dao\PruebaHoraExtraDAO.class
 com\horarios\model\Docente.class
+com\horarios\servlet\AsignaturaServlet.class
 com\horarios\dao\CursoDAO.class
 com\horarios\servlet\CursoServlet.class
 com\horarios\servlet\HorarioServlet.class
+com\horarios\servlet\DocenteServlet.class
+com\horarios\servlet\DocenteServlet$ErrorRespuesta.class
 com\horarios\servlet\GsonUtil$4.class
 com\horarios\dao\PruebaHorarioDAO.class
 com\horarios\dao\ConexionHorarios.class
@@ -22,5 +25,6 @@ com\horarios\servlet\GsonUtil$1.class
 com\horarios\dao\AsignaturaDAO.class
 com\horarios\servlet\GsonUtil.class
 com\notas\dao\EstudianteDAO.class
+com\horarios\servlet\AsignaturaServlet$ErrorRespuesta.class
 com\horarios\servlet\GsonUtil$3.class
 com\horarios\model\Asignatura.class

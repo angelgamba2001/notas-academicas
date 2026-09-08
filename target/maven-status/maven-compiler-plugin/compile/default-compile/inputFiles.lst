@@ -11,7 +11,9 @@ C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\pr
 C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\horarios\model\Docente.java
 C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\horarios\model\HoraExtra.java
 C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\horarios\model\Horario.java
+C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\horarios\servlet\AsignaturaServlet.java
 C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\horarios\servlet\CursoServlet.java
+C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\horarios\servlet\DocenteServlet.java
 C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\horarios\servlet\GsonUtil.java
 C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\horarios\servlet\HorarioServlet.java
 C:\Users\admin\Desktop\universidad\semestres\8 octavo semestre\ingenieria web\primer semestre\notas-academicas\src\main\java\com\notas\dao\ConexionBD.java
