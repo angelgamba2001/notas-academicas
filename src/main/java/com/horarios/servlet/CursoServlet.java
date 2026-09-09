@@ -96,6 +96,33 @@ protected void doDelete(HttpServletRequest request, HttpServletResponse response
     }
 }
 
+@Override
+protected void doPut(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    PrintWriter out = response.getWriter();
+
+    try {
+        BufferedReader reader = request.getReader();
+        StringBuilder sb = new StringBuilder();
+        String linea;
+        while ((linea = reader.readLine()) != null) sb.append(linea);
+
+        Curso curso = gson.fromJson(sb.toString(), Curso.class);
+        cursoDAO.actualizar(curso);
+
+        out.print(gson.toJson(new MensajeRespuesta("Curso actualizado correctamente.")));
+
+    } catch (Exception e) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));
+    } finally {
+        out.close();
+    }
+}
+
 private static class MensajeRespuesta {
     String mensaje;
     MensajeRespuesta(String mensaje) { this.mensaje = mensaje; }

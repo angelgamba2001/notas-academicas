@@ -117,7 +117,10 @@ function cargarCursos() {
                     <td>${c.nombreCurso}</td>
                     <td>${c.jornada}</td>
                     <td>${c.numEstudiantes}</td>
-                    <td class="acciones-fila"><button class="boton boton-peligro" onclick="eliminarCurso(${c.idCurso})">Eliminar</button></td>
+                    <td class="acciones-fila">
+                        <button class="boton boton-secundario" onclick='editarCurso(${c.idCurso}, "${c.nombreCurso}", "${c.jornada}", ${c.numEstudiantes})'>Editar</button>
+                        <button class="boton boton-peligro" onclick="eliminarCurso(${c.idCurso})">Eliminar</button>
+                    </td>
                 </tr>`;
             });
         })
@@ -138,7 +141,10 @@ function cargarDocentes() {
                     <td>${d.disponibilidad ?? '-'}</td>
                     <td>${d.horasMaximasSemanales}</td>
                     <td style="color: ${excedido ? 'var(--lapiz-rojo)' : 'inherit'}; font-weight: ${excedido ? '700' : 'inherit'}">${d.cargaActual} hrs</td>
-                    <td class="acciones-fila"><button class="boton boton-peligro" onclick="eliminarDocente(${d.idDocente})">Eliminar</button></td>
+                    <td class="acciones-fila">
+                        <button class="boton boton-secundario" onclick='editarDocente(${d.idDocente}, "${d.nombre}", "${d.apellido}", "${d.disponibilidad ?? ""}", ${d.horasMaximasSemanales})'>Editar</button>
+                        <button class="boton boton-peligro" onclick="eliminarDocente(${d.idDocente})">Eliminar</button>
+                    </td>
                 </tr>`;
             });
         })
@@ -156,7 +162,10 @@ function cargarAsignaturas() {
                 tbody.innerHTML += `<tr>
                     <td>${a.nombre}</td>
                     <td>${a.intensidadHoraria} hrs</td>
-                    <td class="acciones-fila"><button class="boton boton-peligro" onclick="eliminarAsignatura(${a.idAsignatura})">Eliminar</button></td>
+                    <td class="acciones-fila">
+                        <button class="boton boton-secundario" onclick='editarAsignatura(${a.idAsignatura}, "${a.nombre}", ${a.intensidadHoraria})'>Editar</button>
+                        <button class="boton boton-peligro" onclick="eliminarAsignatura(${a.idAsignatura})">Eliminar</button>
+                    </td>
                 </tr>`;
             });
         })
@@ -185,12 +194,14 @@ function cargarHorarios() {
 }
 
 // --- Crear curso ---
+let cursoEditandoId = null;
+// --- Crear o actualizar curso ---
 document.getElementById('formCurso').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const selectGrado = document.getElementById('cGrado');
     const numeroGrado = selectGrado.value;
-    const nombreGrado = selectGrado.options[selectGrado.selectedIndex].text; // toma el texto visible, ej: "4°"
+    const nombreGrado = selectGrado.options[selectGrado.selectedIndex].text;
     const seccion = document.getElementById('cSeccion').value;
 
     const datos = {
@@ -200,18 +211,61 @@ document.getElementById('formCurso').addEventListener('submit', function(e) {
         numEstudiantes: parseInt(document.getElementById('cNumEstudiantes').value)
     };
 
+    const esEdicion = cursoEditandoId !== null;
+    if (esEdicion) datos.idCurso = cursoEditandoId;
+
     fetch('api/cursos', {
-        method: 'POST',
+        method: esEdicion ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
     })
     .then(res => res.json())
     .then(() => {
         document.getElementById('formCurso').reset();
+        cancelarEdicionCurso();
         cargarCursos();
     })
-    .catch(err => alert('Error al crear curso: ' + err));
+    .catch(err => alert('Error al guardar curso: ' + err));
 });
+
+// Rellena el formulario con los datos del curso a editar
+function editarCurso(id, nombreCurso, jornada, numEstudiantes) {
+    const [numeroGrado, seccion] = nombreCurso.split('-');
+
+    document.getElementById('cGrado').value = numeroGrado;
+    document.getElementById('cSeccion').value = seccion;
+    document.getElementById('cJornada').value = jornada;
+    document.getElementById('cNumEstudiantes').value = numEstudiantes;
+
+    cursoEditandoId = id;
+
+    const boton = document.querySelector('#formCurso button[type="submit"]');
+    boton.textContent = 'Guardar Cambios';
+    boton.classList.add('editando');
+}
+
+function cancelarEdicionCurso() {
+    cursoEditandoId = null;
+    const boton = document.querySelector('#formCurso button[type="submit"]');
+    boton.textContent = 'Agregar Curso';
+    boton.classList.remove('editando');
+}
+
+// --- Eliminar curso ---
+function eliminarCurso(id) {
+    if (!confirm('¿Seguro que quieres eliminar este curso?')) return;
+
+    fetch('api/cursos?id=' + id, { method: 'DELETE' })
+        .then(res => res.json().then(body => ({ status: res.status, body })))
+        .then(({ status, body }) => {
+            if (status === 200) {
+                cargarCursos();
+            } else {
+                alert(body.error);
+            }
+        })
+        .catch(err => alert('Error al eliminar: ' + err));
+}
 // --- Eliminar curso ---
 function eliminarCurso(id) {
     if (!confirm('¿Seguro que quieres eliminar este curso?')) return;
@@ -223,6 +277,8 @@ function eliminarCurso(id) {
 }
 
 // --- Crear docente ---
+let docenteEditandoId = null;
+
 document.getElementById('formDocente').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -233,18 +289,53 @@ document.getElementById('formDocente').addEventListener('submit', function(e) {
         horasMaximasSemanales: parseInt(document.getElementById('dHorasMax').value)
     };
 
+    const esEdicion = docenteEditandoId !== null;
+    if (esEdicion) datos.idDocente = docenteEditandoId;
+
     fetch('api/docentes', {
-        method: 'POST',
+        method: esEdicion ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
     })
     .then(res => res.json())
     .then(() => {
         document.getElementById('formDocente').reset();
+        cancelarEdicionDocente();
         cargarDocentes();
     })
-    .catch(err => alert('Error al crear docente: ' + err));
+    .catch(err => alert('Error al guardar docente: ' + err));
 });
+
+function editarDocente(id, nombre, apellido, disponibilidad, horasMax) {
+    document.getElementById('dNombre').value = nombre;
+    document.getElementById('dApellido').value = apellido;
+    document.getElementById('dDisponibilidad').value = disponibilidad;
+    document.getElementById('dHorasMax').value = horasMax;
+
+    docenteEditandoId = id;
+    const boton = document.querySelector('#formDocente button[type="submit"]');
+    boton.textContent = 'Guardar Cambios';
+}
+
+function cancelarEdicionDocente() {
+    docenteEditandoId = null;
+    document.querySelector('#formDocente button[type="submit"]').textContent = 'Agregar Docente';
+}
+
+function eliminarDocente(id) {
+    if (!confirm('¿Seguro que quieres eliminar este docente?')) return;
+
+    fetch('api/docentes?id=' + id, { method: 'DELETE' })
+        .then(res => res.json().then(body => ({ status: res.status, body })))
+        .then(({ status, body }) => {
+            if (status === 200) {
+                cargarDocentes();
+            } else {
+                alert(body.error);
+            }
+        })
+        .catch(err => alert('Error al eliminar: ' + err));
+}
 
 // --- Eliminar docente ---
 function eliminarDocente(id) {
@@ -257,6 +348,8 @@ function eliminarDocente(id) {
 }
 
 // --- Crear asignatura ---
+let asignaturaEditandoId = null;
+
 document.getElementById('formAsignatura').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -265,18 +358,50 @@ document.getElementById('formAsignatura').addEventListener('submit', function(e)
         intensidadHoraria: parseInt(document.getElementById('aIntensidad').value)
     };
 
+    const esEdicion = asignaturaEditandoId !== null;
+    if (esEdicion) datos.idAsignatura = asignaturaEditandoId;
+
     fetch('api/asignaturas', {
-        method: 'POST',
+        method: esEdicion ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
     })
     .then(res => res.json())
     .then(() => {
         document.getElementById('formAsignatura').reset();
+        cancelarEdicionAsignatura();
         cargarAsignaturas();
     })
-    .catch(err => alert('Error al crear asignatura: ' + err));
+    .catch(err => alert('Error al guardar asignatura: ' + err));
 });
+
+function editarAsignatura(id, nombre, intensidad) {
+    document.getElementById('aNombre').value = nombre;
+    document.getElementById('aIntensidad').value = intensidad;
+
+    asignaturaEditandoId = id;
+    document.querySelector('#formAsignatura button[type="submit"]').textContent = 'Guardar Cambios';
+}
+
+function cancelarEdicionAsignatura() {
+    asignaturaEditandoId = null;
+    document.querySelector('#formAsignatura button[type="submit"]').textContent = 'Agregar Asignatura';
+}
+
+function eliminarAsignatura(id) {
+    if (!confirm('¿Seguro que quieres eliminar esta asignatura?')) return;
+
+    fetch('api/asignaturas?id=' + id, { method: 'DELETE' })
+        .then(res => res.json().then(body => ({ status: res.status, body })))
+        .then(({ status, body }) => {
+            if (status === 200) {
+                cargarAsignaturas();
+            } else {
+                alert(body.error);
+            }
+        })
+        .catch(err => alert('Error al eliminar: ' + err));
+}
 
 // --- Eliminar asignatura ---
 function eliminarAsignatura(id) {
