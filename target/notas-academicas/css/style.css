@@ -65,6 +65,36 @@ body {
     
 }
 
+.tabla-horario-visual { width: 100%; border-collapse: collapse; }
+.tabla-horario-visual th, .tabla-horario-visual td {
+    border: 1px solid var(--borde);
+    padding: 0.6rem;
+    text-align: center;
+    vertical-align: top;
+    min-width: 110px;
+}
+.tabla-horario-visual th {
+    background: var(--navy-900);
+    color: #F1ECE3;
+    font-family: var(--fuente-datos);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+}
+.tabla-horario-visual td.hora {
+    background: #F7F9FC;
+    font-family: var(--fuente-datos);
+    font-weight: 700;
+    color: var(--tinta-suave);
+    font-size: 0.8rem;
+}
+.celda-clase {
+    background: #FFF3E8;
+    border-radius: var(--radio);
+    padding: 0.4rem;
+}
+.celda-clase .materia { font-weight: 700; color: var(--naranja-oscuro); font-size: 0.85rem; }
+.celda-clase .curso { font-size: 0.75rem; color: var(--tinta-suave); }
+
 .barra-marca {
     max-width: 1360px;
     margin: 0 auto;

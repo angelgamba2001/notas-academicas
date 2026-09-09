@@ -100,6 +100,8 @@ function cargarDashboard() {
             document.getElementById('dashHorarios').textContent = data.totalHorariosAsignados;
         })
         .catch(err => console.error('Error cargando dashboard:', err));
+
+    cargarSelectDashboardDocentes(); // agrega esta línea
 }
 
 // --- CURSOS ---
@@ -375,6 +377,80 @@ function eliminarCurso(id) {
             }
         })
         .catch(err => alert('Error al eliminar: ' + err));
+}
+
+
+// Llena el select de docentes en el Dashboard
+function cargarSelectDashboardDocentes() {
+    fetch('api/docentes')
+        .then(res => res.json())
+        .then(data => {
+            const select = document.getElementById('dashSelectDocente');
+            select.innerHTML = '<option value="">Selecciona un docente...</option>' +
+                data.map(d => `<option value="${d.idDocente}">${d.nombre} ${d.apellido}</option>`).join('');
+        })
+        .catch(err => console.error('Error cargando docentes para dashboard:', err));
+}
+
+// Al elegir un docente y darle clic al botón, dibuja su horario visual
+function mostrarHorarioDocenteDashboard() {
+    const idDocente = document.getElementById('dashSelectDocente').value;
+    const contenedor = document.getElementById('horarioVisualContainer');
+
+    if (!idDocente) {
+        contenedor.innerHTML = '<p class="ayuda">Selecciona un docente para ver su horario.</p>';
+        return;
+    }
+
+    fetch('api/horarios?idDocente=' + idDocente)
+        .then(res => res.json())
+        .then(horarios => renderHorarioVisual(horarios, contenedor))
+        .catch(err => {
+            contenedor.innerHTML = '<p class="mensaje error">Error al cargar el horario.</p>';
+            console.error(err);
+        });
+}
+
+// Construye la cuadrícula visual tipo horario de clases
+function renderHorarioVisual(horarios, contenedor) {
+    const dias = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
+
+    if (horarios.length === 0) {
+        contenedor.innerHTML = '<p class="ayuda">Este docente no tiene horario asignado.</p>';
+        return;
+    }
+
+    // Saca los bloques de hora distintos que tiene este docente, y los ordena
+    const bloques = [...new Set(horarios.map(h => h.horaInicio + '|' + h.horaFin))]
+        .sort((a, b) => a.localeCompare(b));
+
+    let html = '<div class="tabla-envoltorio"><table class="tabla-horario-visual"><thead><tr><th>Hora</th>';
+    dias.forEach(d => html += `<th>${d}</th>`);
+    html += '</tr></thead><tbody>';
+
+    bloques.forEach(bloque => {
+        const [inicio, fin] = bloque.split('|');
+        html += `<tr><td class="hora">${inicio}<br>${fin}</td>`;
+
+        dias.forEach(dia => {
+            const clase = horarios.find(h => h.dia === dia && h.horaInicio === inicio && h.horaFin === fin);
+            if (clase) {
+                html += `<td>
+                    <div class="celda-clase">
+                        <div class="materia">${clase.nombreAsignatura}</div>
+                        <div class="curso">${clase.nombreCurso}</div>
+                    </div>
+                </td>`;
+            } else {
+                html += '<td></td>';
+            }
+        });
+
+        html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    contenedor.innerHTML = html;
 }
 
 // Cargar el dashboard automáticamente al abrir la página (es la pestaña inicial)
