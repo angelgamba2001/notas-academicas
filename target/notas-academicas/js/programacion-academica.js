@@ -362,5 +362,20 @@ function eliminarHorario(id) {
         .catch(err => alert('Error al eliminar: ' + err));
 }
 
+function eliminarCurso(id) {
+    if (!confirm('¿Seguro que quieres eliminar este curso?')) return;
+
+    fetch('api/cursos?id=' + id, { method: 'DELETE' })
+        .then(res => res.json().then(body => ({ status: res.status, body })))
+        .then(({ status, body }) => {
+            if (status === 200) {
+                cargarCursos();
+            } else {
+                alert(body.error); // muestra el mensaje amigable
+            }
+        })
+        .catch(err => alert('Error al eliminar: ' + err));
+}
+
 // Cargar el dashboard automáticamente al abrir la página (es la pestaña inicial)
 document.addEventListener('DOMContentLoaded', cargarDashboard);

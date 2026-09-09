@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
-
+import java.sql.SQLException;
 
 @WebServlet("/api/cursos")
 public class CursoServlet extends HttpServlet {
@@ -79,6 +79,15 @@ protected void doDelete(HttpServletRequest request, HttpServletResponse response
         cursoDAO.eliminar(id);
         out.print(gson.toJson(new MensajeRespuesta("Curso eliminado correctamente.")));
 
+    } catch (SQLException e) {
+        if (e.getErrorCode() == 1451) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT); // 409
+            out.print(gson.toJson(new ErrorRespuesta(
+                "No se puede eliminar este curso porque tiene horarios asignados. Elimina primero esos horarios.")));
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print(gson.toJson(new ErrorRespuesta("Error al eliminar: " + e.getMessage())));
+        }
     } catch (Exception e) {
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));

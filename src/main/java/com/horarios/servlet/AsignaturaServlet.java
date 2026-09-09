@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.sql.SQLException;
+
 
 @WebServlet("/api/asignaturas")
 public class AsignaturaServlet extends HttpServlet {
@@ -88,6 +90,15 @@ protected void doDelete(HttpServletRequest request, HttpServletResponse response
         asignaturaDAO.eliminar(id);
         out.print(gson.toJson(new MensajeRespuesta("Asignatura eliminada correctamente.")));
 
+    } catch (SQLException e) {
+        if (e.getErrorCode() == 1451) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+            out.print(gson.toJson(new ErrorRespuesta(
+                "No se puede eliminar esta asignatura porque está asignada a uno o más docentes u horarios. Elimina primero esas relaciones.")));
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print(gson.toJson(new ErrorRespuesta("Error al eliminar: " + e.getMessage())));
+        }
     } catch (Exception e) {
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));

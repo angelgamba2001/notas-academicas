@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.horarios.dao.HorarioDAO; 
 import java.io.BufferedReader;
+import java.sql.SQLException;
 
 @WebServlet("/api/docentes")
 public class DocenteServlet extends HttpServlet {
@@ -103,6 +104,15 @@ protected void doDelete(HttpServletRequest request, HttpServletResponse response
         docenteDAO.eliminar(id);
         out.print(gson.toJson(new MensajeRespuesta("Docente eliminado correctamente.")));
 
+    } catch (SQLException e) {
+        if (e.getErrorCode() == 1451) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+            out.print(gson.toJson(new ErrorRespuesta(
+                "No se puede eliminar este docente porque tiene horarios u horas extra asignadas. Elimina primero esos registros.")));
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print(gson.toJson(new ErrorRespuesta("Error al eliminar: " + e.getMessage())));
+        }
     } catch (Exception e) {
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         out.print(gson.toJson(new ErrorRespuesta(e.getMessage())));
@@ -110,7 +120,6 @@ protected void doDelete(HttpServletRequest request, HttpServletResponse response
         out.close();
     }
 }
-
 private static class MensajeRespuesta {
     String mensaje;
     MensajeRespuesta(String mensaje) { this.mensaje = mensaje; }
