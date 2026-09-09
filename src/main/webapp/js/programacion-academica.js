@@ -186,9 +186,14 @@ function cargarHorarios() {
 document.getElementById('formCurso').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const selectGrado = document.getElementById('cGrado');
+    const numeroGrado = selectGrado.value;
+    const nombreGrado = selectGrado.options[selectGrado.selectedIndex].text; // toma el texto visible, ej: "4°"
+    const seccion = document.getElementById('cSeccion').value;
+
     const datos = {
-        grado: document.getElementById('cGrado').value,
-        nombreCurso: document.getElementById('cNombreCurso').value,
+        grado: nombreGrado,
+        nombreCurso: numeroGrado + "-" + seccion,
         jornada: document.getElementById('cJornada').value,
         numEstudiantes: parseInt(document.getElementById('cNumEstudiantes').value)
     };
@@ -205,7 +210,6 @@ document.getElementById('formCurso').addEventListener('submit', function(e) {
     })
     .catch(err => alert('Error al crear curso: ' + err));
 });
-
 // --- Eliminar curso ---
 function eliminarCurso(id) {
     if (!confirm('¿Seguro que quieres eliminar este curso?')) return;
