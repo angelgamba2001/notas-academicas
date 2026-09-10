@@ -7,7 +7,7 @@
     <style>
         .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
         .tab-btn { padding: 0.5rem 1rem; font-size: 0.82rem; }
-        .tab-btn.activo { background: var(--naranja); color: #fff; }
+        .tab-btn.activo { background: var(--naranja); color: #0A0A0A; font-weight: 700; }
         .tab-btn.activo::before { display: none; }
 
         .tab-contenido { display: none; }
@@ -16,12 +16,12 @@
         .dashboard-cajas { display: flex; gap: 1rem; flex-wrap: wrap; }
         .dashboard-cajas .caja {
             flex: 1; min-width: 160px; text-align: center;
-            background: #F7F9FC; border: 1px solid var(--borde);
+            background: #181818; border: 1px solid var(--borde);
             border-radius: var(--radio-tarjeta); padding: 1.2rem 1rem;
         }
         .dashboard-cajas .valor {
             font-family: var(--fuente-datos); font-size: 2rem;
-            font-weight: 700; color: var(--naranja-oscuro);
+            font-weight: 700; color: var(--naranja);
         }
         .dashboard-cajas .etiqueta {
             font-size: 0.78rem; text-transform: uppercase;
@@ -35,11 +35,11 @@
         .fila-form input, .fila-form select {
             padding: 0.6rem 0.8rem; border: 1.5px solid var(--borde);
             border-radius: var(--radio); font-family: var(--fuente-cuerpo);
-            font-size: 0.92rem; background: #FAFBFD;
+            font-size: 0.92rem; background: #1A1A1A; color: var(--tinta);
         }
         .fila-form input:focus-visible, .fila-form select:focus-visible {
-            outline: none; border-color: var(--naranja); background: #fff;
-            box-shadow: 0 0 0 3px rgba(240, 134, 46, 0.18);
+            outline: none; border-color: var(--naranja); background: #222222;
+            box-shadow: 0 0 0 3px rgba(240, 134, 46, 0.25);
         }
     </style>
 </head>
